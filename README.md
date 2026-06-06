@@ -1,30 +1,89 @@
-# Building a Neural Network Framework From Scratch (NumPy)
+# Neural Network Visualizer
 
-A modular, readable deep learning framework built entirely from scratch using only NumPy. Instead of using pre-made tools like PyTorch or TensorFlow, this project builds the underlying mathematical layers, error-tracking, and optimization systems completely from first principles.
+A clean, from-scratch neural network implementation in NumPy that learns to classify a 2D spiral dataset and visualizes the learned decision boundaries.
 
-## 🎯 What This Project Does
+## Overview
 
-This framework solves a classic machine learning problem: classifying data that cannot be separated by straight lines. 
+This project demonstrates a simple deep learning pipeline built without PyTorch or TensorFlow. It includes:
 
-The code generates a non-linear 2D spiral dataset containing three distinct classes. A standard linear equation cannot solve this. Our custom network processes the coordinates, automatically learns the curves of the dataset, and creates a visual report (`model_performance_report.png`) mapping out its learned decision boundaries.
+- A custom `Dense` neural layer with trainable weights and biases
+- The `ReLU` activation function
+- A combined softmax + cross-entropy loss function
+- The Adam optimizer
+- A streaming batch data pipeline
+- Training progress visualization and decision boundary plotting
 
-## 🧱 The Code
+## What the Project Does
 
-The project is split into isolated, reusable blocks so you can add new features without breaking the core engine:
+The `main.py` script:
 
-* **`src/base.py`**: The master blueprint. It forces every layer we create to handle data moving forward (predictions) and backward (learning).
-* **`src/layers.py`**: The structural components. Contains the `Dense` layer (which connects every input to every output using scaled random weights) and the `ReLU` layer (which acts as an on/off switch to handle complex curves).
-* **`src/losses.py`**: The scoring system. It measures how wrong the network's guesses are and scales down giant numbers so the computer's memory doesn't overflow.
-* **`src/optimizers.py`**: The teacher. It uses the Adam optimization algorithm to track past mistakes, smooth out noisy updates, and adjust the weights in the right direction.
-* **`data/pipeline.py`**: The delivery truck. It slices the dataset into small batches for the network to read, managing computer memory efficiently.
+1. Generates a synthetic 2D spiral dataset with 3 classes
+2. Splits the data into training and test sets
+3. Builds a small neural network:
+   - `Dense(2, 64)`
+   - `ReLU()`
+   - `Dense(64, 3)`
+4. Trains the model using mini-batch gradient descent
+5. Evaluates the model on unseen test data
+6. Saves and displays a plot showing:
+   - training loss over epochs
+   - decision regions learned by the network
 
-## 🚀 Quick Start Guide
+## Repository Structure
 
-### 1. Set Up the Environment
-Clone the repository and set up a clean, isolated Python environment:
+- `main.py` — data generation, model training loop, evaluation, and visualization trigger
+- `visualize.py` — training loss plot and decision boundary visualization
+- `requirements.txt` — required Python packages
+- `data/pipeline.py` — batch streaming utility for training
+- `src/base.py` — base `Layer` class and shared layer structure
+- `src/layers.py` — `Dense` and `ReLU` layer implementations
+- `src/losses.py` — `SoftmaxCrossEntropy` loss implementation
+- `src/optimizers.py` — `Adam` optimizer implementation
+
+## Installation
+
 ```bash
-git clone [https://github.com/Robochampion5/numpy-deep-learning.git](https://github.com/Robochampion5/numpy-deep-learning.git)
-cd numpy-deep-learning
 python3 -m venv .venv
-source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
-pip install -r requirements.txt# Neural_Network_visualizer
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Usage
+
+Run the training script with:
+
+```bash
+python3 main.py
+```
+
+After training, the script will generate `model_performance_report.png` containing the loss curve and decision boundary plot.
+
+## Key Concepts
+
+- **Dense layer**: matrix multiplication plus bias
+- **ReLU activation**: zeroes negative values to introduce non-linearity
+- **Softmax + Cross-Entropy**: converts logits to probabilities and computes classification loss
+- **Adam optimizer**: adaptive optimization with momentum and variance scaling
+- **Mini-batch training**: processes data in batches for stable learning
+
+## Requirements
+
+- Python 3.8+
+- NumPy
+- Matplotlib
+
+Install with:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Notes
+
+- The dataset is synthetic and designed to demonstrate non-linear decision boundaries.
+- The visualization helps confirm that the network is learning meaningful class separation.
+- The code is intentionally modular to make it easy to extend with new layers, losses, or optimizers.
+
+## License
+
+This project is provided as-is for learning and experimentation.
